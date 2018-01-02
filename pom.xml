@@ -11,6 +11,7 @@
 
     <modules>
         <module>spring-amqp</module>
+        <module>amqp</module>
     </modules>
 
     <properties>
