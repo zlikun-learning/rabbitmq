@@ -9,13 +9,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * http://www.rabbitmq.com/tutorials/tutorial-one-java.html
- *
  * @author zlikun <zlikun-dev@hotmail.com>
- * @date 2017-12-25 18:24
+ * @date 2018-01-02 18:45
  */
 @Slf4j
-public class AmqpTest {
+public class DirectExchangeTest {
 
     private final String HOST = "rabbitmq.zlikun.com";
     private final String QUEUE_NAME = "A.TEST";
@@ -53,13 +51,13 @@ public class AmqpTest {
         Channel channel = connection.createChannel();
 
         // 声明交换器，默认：direct 交换器
-        AMQP.Queue.DeclareOk declareOk = channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-        log.info("QUEUE NAME is {}", declareOk.getQueue());
+        AMQP.Exchange.DeclareOk declareOk = channel.exchangeDeclare("direct-exchange", "direct", false);
+        log.info("exchange : {}", declareOk.toString());
 
         // 创建纯文本消息
         // 发布消息
         String message = "Hello World!";
-        channel.basicPublish("", QUEUE_NAME, null, message.getBytes());
+        channel.basicPublish("direct-exchange", QUEUE_NAME, null, message.getBytes());
         log.info("[x] Sent '{}'", message);
 
         channel.close();
