@@ -10,8 +10,8 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>spring-amqp</module>
         <module>amqp</module>
+        <module>amqp-spring</module>
     </modules>
 
     <properties>
