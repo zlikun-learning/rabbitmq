@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:annotation-config />
+    <context:component-scan base-package="com.zlikun.learning" />
+
+    <rabbit:connection-factory
+            id="connectionFactory"
+            addresses="rabbitmq.zlikun.com:5672"
+            username="root"
+            password="123456"
+            virtual-host="/"
+            channel-cache-size="30"
+    />
+
+    <rabbit:queue name="A.TEST" durable="false" />
+
+    <rabbit:direct-exchange name="direct_exchange" durable="false" auto-delete="true">
+        <rabbit:bindings>
+            <rabbit:binding queue="A.TEST" />
+        </rabbit:bindings>
+    </rabbit:direct-exchange>
+
+    <rabbit:template
+            id="rabbitTemplate"
+            connection-factory="connectionFactory"
+    />
+
+    <rabbit:listener-container connection-factory="connectionFactory">
+        <rabbit:listener ref="simpleDirectMessageListener" queue-names="A.TEST" />
+    </rabbit:listener-container>
+
+</beans>
